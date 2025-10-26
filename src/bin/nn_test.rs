@@ -3,7 +3,7 @@ use tch::{
     nn::{self, Module, OptimizerConfig, VarStore},
 };
 
-// This neural network is from the book Build a Large Language Model
+// This neural network is from the book, Build a Large Language Model
 // from Scratch, page 266.
 fn build_nn(vs: &nn::Path, num_inputs: i64, num_outputs: i64) -> impl Module {
     nn::seq()
@@ -50,6 +50,34 @@ fn train_example_one() {
     out.print();
 }
 
+/// Compute the accuracy of a classification model
+fn compute_accuracy(
+    model: &impl Module,
+    x: &tch::Tensor,
+    y: &tch::Tensor,
+    batch_size: i64,
+) -> f64 {
+    let mut correct = 0.0;
+    let mut total_examples = 0.0;
+
+    for (features, labels) in
+        tch::data::Iter2::new(&x, &y, batch_size).shuffle()
+    {
+        let logits = model.forward(&features);
+        let predictions = logits.argmax(-1, false);
+
+        let correct_tensor = predictions
+            .eq_tensor(&labels)
+            .to_kind(tch::Kind::Float)
+            .sum(tch::Kind::Float);
+        correct += correct_tensor.double_value(&[]);
+        total_examples += labels.size()[0] as f64;
+    }
+
+    let accuracy = correct / total_examples;
+    accuracy
+}
+
 // Example from Build a Large Language Model from Scratch, page 274
 fn train_example_two() -> anyhow::Result<()> {
     tch::manual_seed(123);
@@ -61,8 +89,8 @@ fn train_example_two() -> anyhow::Result<()> {
         tch::Tensor::from_slice(&[0, 0, 0, 1, 1]).to_kind(tch::Kind::Int64);
 
     let v_test: Vec<f32> = vec![-0.8, 2.6, 2.6, -1.6];
-    let _x_test = tch::Tensor::from_slice(&v_test).view([2, 2]);
-    let _y_test = tch::Tensor::from_slice(&[0, 1]);
+    let x_test = tch::Tensor::from_slice(&v_test).view([2, 2]);
+    let y_test = tch::Tensor::from_slice(&[0, 1]);
 
     let vs = nn::VarStore::new(Device::Cpu);
     println!("VarStore device: {:?}", vs.device());
@@ -110,6 +138,12 @@ fn train_example_two() -> anyhow::Result<()> {
     let predictions = outputs.argmax(-1, false);
     println!("predictions:");
     predictions.print();
+
+    let train_accuracy =
+        compute_accuracy(&model, &x_train, &y_train, batch_size);
+    let test_accuracy = compute_accuracy(&model, &x_test, &y_test, batch_size);
+    println!("Training accuracy: {:?}", train_accuracy);
+    println!("Test accuracy: {:?}", test_accuracy);
 
     Ok(())
 }
