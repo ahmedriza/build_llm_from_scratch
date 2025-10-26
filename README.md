@@ -3,7 +3,7 @@ This is code repo to follow along the book:
 Build a Large Language Model from Scratch. 
 
 The code is in two languages, Rust and Python.  The book uses Python
-code and I've written the Rust code myself based on the Python code.
+code and I've written the Rust code based on the Python code.
 
 Create a virtual environment and activate it and then install the
 required packages.
