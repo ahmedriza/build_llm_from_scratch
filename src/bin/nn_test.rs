@@ -121,7 +121,8 @@ fn train_example_two() -> anyhow::Result<()> {
             // based on their gradients
             optimiser.step();
             println!(
-                "epoch: {:>3}/{num_epochs} | batch: {:>3}/{batch_size} | loss: {:8.5}",
+                "epoch: {:>3}/{num_epochs} | batch: {:>3}/{batch_size} \
+                | loss: {:8.5}",
                 epoch,
                 batch_id,
                 &loss.double_value(&[])

@@ -15,5 +15,26 @@ fn main() -> anyhow::Result<()> {
     println!("t(mps) {:?}", &t);
     println!("t device: {:?}", &t.device());
 
+    ndarray_example();
+    grad_example();
+
     Ok(())
+}
+
+fn ndarray_example() {
+    let nd = ndarray::arr2(&[[1f64, 2.], [3., 4.]]);
+    let tensor = tch::Tensor::try_from(nd.clone()).unwrap();
+    println!("ndarray: \n{:?}", nd);
+    println!("tensor:");
+    tensor.print();
+}
+
+fn grad_example() {
+    let mut x = tch::Tensor::from(2.0).set_requires_grad(true);
+    let y = &x * &x + &x + 36;
+    println!("y: {}", y.double_value(&[]));
+    x.zero_grad();
+    y.backward();
+    let dy_over_dx = x.grad();
+    println!("dy/dx = {}", dy_over_dx.double_value(&[]));
 }

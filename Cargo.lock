@@ -115,6 +115,7 @@ dependencies = [
  "anyhow",
  "log",
  "log4rs",
+ "ndarray",
  "serde",
  "serde_json",
  "tch",
