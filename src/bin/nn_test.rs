@@ -60,9 +60,7 @@ fn compute_accuracy(
     let mut correct = 0.0;
     let mut total_examples = 0.0;
 
-    for (features, labels) in
-        tch::data::Iter2::new(&x, &y, batch_size).shuffle()
-    {
+    for (features, labels) in tch::data::Iter2::new(&x, &y, batch_size) {
         let logits = model.forward(&features);
         let predictions = logits.argmax(-1, false);
 
