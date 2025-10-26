@@ -22,7 +22,7 @@ in the virtuan env.
 
 # Rust
 
-We use the [tch-rs](https://github.com/LaurentMazare/tch-rs) crate
+I use the excellent [tch-rs](https://github.com/LaurentMazare/tch-rs) crate
 for `torch` rust bindings.
 
 There is a `.cargo/config.toml` file with the following contents to set `LIBTORCH` and `DYLD_LIBRARY_PATH`.
