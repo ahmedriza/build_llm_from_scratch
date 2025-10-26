@@ -1,6 +1,8 @@
-This is code repo to follow along the book:
+# Summary 
 
-Build a Large Language Model from Scratch. 
+This is a code repo to follow along the book:
+
+Build a Large Language Model from Scratch by Sebastian Raschka, Manning Publications Co, 2025.
 
 The code is in two languages, Rust and Python.  The book uses Python
 code and I've written the Rust code based on the Python code.
