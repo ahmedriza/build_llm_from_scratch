@@ -110,14 +110,15 @@ fn train_example_two() -> anyhow::Result<()> {
         for (features, labels) in
             tch::data::Iter2::new(&x_train, &y_train, batch_size).shuffle()
         {
-            // features.print();
             let logits = model.forward(&features);
-            // logits.print();
             let loss = logits.cross_entropy_for_logits(&labels);
             // sets the gradients from the previous round to zero to prevent
             // unintented gradient accumulation
             optimiser.zero_grad();
+            // Calculate the gradients
             loss.backward();
+            // Perform an optimisation step, updating the tracked tensors
+            // based on their gradients
             optimiser.step();
             println!(
                 "epoch: {:>3}/{num_epochs} | batch: {:>3}/{batch_size} | loss: {:8.5}",
