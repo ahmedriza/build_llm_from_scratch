@@ -3,6 +3,8 @@ use tch::{
     nn::{self, Module, OptimizerConfig, VarStore},
 };
 
+// This neural network is from the book Build a Large Language Model
+// from Scratch, page 266.
 fn build_nn(vs: &nn::Path, num_inputs: i64, num_outputs: i64) -> impl Module {
     nn::seq()
         // 1st hidden layer
@@ -64,7 +66,6 @@ fn train_example_two() -> anyhow::Result<()> {
 
     let vs = nn::VarStore::new(Device::Cpu);
     println!("VarStore device: {:?}", vs.device());
-
 
     let binding = vs.root();
     // The dataset has 2 input features and 2 output classes
